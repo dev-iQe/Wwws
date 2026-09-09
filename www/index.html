@@ -42,6 +42,8 @@
 
   .app-header{
     display:flex; align-items:center; justify-content:space-between; padding:12px 20px;
+    /* دعم مساحة آمنة لشريط الإشعارات والجزيرة الحية */
+    padding-top: calc(12px + env(safe-area-inset-top));
     background: rgba(12, 12, 18, 0.7); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
     border-bottom: 1px solid rgba(255,255,255,0.1);
     box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.15);
@@ -231,7 +233,7 @@
       <button class="tv-nav-item active" onclick="loadContent('all', this)">الرئيسية</button>
       <button class="tv-nav-item" onclick="loadContent('tv', this)">المسلسلات</button>
       <button class="tv-nav-item" onclick="loadContent('movie', this)">الأفلام</button>
-      <button class="tv-nav-item" onclick="loadContent('library', this)">المفضلة</button>
+      <button class="tv-nav-item" onclick="loadContent('library', this)">المكتبة</button>
       <button class="tv-nav-item" onclick="loadContent('developer', this)">المطور</button>
     </div>
     <div class="search-container" id="search-container">
@@ -260,6 +262,7 @@
     </div>
   </div>
   
+  <!-- Cast Section Added Here -->
   <div class="cast-section" id="cast-container-wrap">
     <div style="font-size:14px; text-shadow:0 0 8px rgba(255,255,255,0.2);">طاقم التمثيل:</div>
     <div class="cast-row" id="cast-row"></div>
@@ -287,18 +290,11 @@
     </div>
   </div>
   <div class="player-iframe-wrap">
-    <!-- تم إضافة خصائص الحماية والساندبوكس لمنع الإعلانات والنوافذ المنبثقة تماماً -->
-    <iframe id="video-frame" src="" sandbox="allow-scripts allow-same-origin allow-presentation" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
+    <iframe id="video-frame" src="" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
   </div>
 </div>
 
 <script>
-// منع النوافذ المنبثقة وتحويلات الإعلانات برمجياً بشكل كامل
-window.open = function() {
-  console.log("تم حظر نافذة منبثقة بنجاح.");
-  return null;
-};
-
 const apiKey = '7584c7bf4000a0928f7df969c1f43ea5';
 let heroMovieId = 339403;
 let heroItemData = { id: 339403, title: "Baby Driver", overview: "Doc forces Baby...", backdrop_path: "/6ELCZlTA5lGUPs70hupCD8ZoxL4.jpg", media_type: "movie" };
@@ -596,6 +592,7 @@ function openDetailsModal(item) {
     libBtn.innerText = 'إضافة للمكتبة';
   }
 
+  // Fetch Cast (Actors)
   const mediaType = (item.media_type === 'tv' || item.name) ? 'tv' : 'movie';
   fetch(`https://api.themoviedb.org/3/${mediaType}/${item.id}/credits?api_key=${apiKey}&language=ar-AR`)
     .then(res => res.json())
