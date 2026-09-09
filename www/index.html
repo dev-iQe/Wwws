@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>Strofy - Liquid Glass Ecosystem</title>
+<title>Strofy</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
   @font-face {
@@ -42,9 +42,9 @@
 
   .app-header{
     display:flex; align-items:center; justify-content:space-between; padding:12px 20px;
-    /* دعم مساحة آمنة لشريط الإشعارات والجزيرة الحية */
-    padding-top: calc(12px + env(safe-area-inset-top));
-    background: rgba(12, 12, 18, 0.7); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+    /* زيادة المساحة العلوية بشكل قسري لضمان عدم التداخل مع شريط النظام والجزيرة الحية */
+    padding-top: max(45px, env(safe-area-inset-top));
+    background: rgba(12, 12, 18, 0.85); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
     border-bottom: 1px solid rgba(255,255,255,0.1);
     box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.15);
     position:sticky; top:0; z-index:100; gap:12px; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -196,7 +196,6 @@
   .episode-card:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.4); box-shadow: var(--primary-glow); transform: scale(1.02); }
   .episode-title { font-size: 11px; margin-top: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-  /* Cast Horizontal Scroll Styles */
   .cast-section { padding: 20px; max-width: 1200px; margin: 0 auto; }
   .cast-row { display: flex; gap: 12px; overflow-x: auto; scroll-behavior: smooth; padding-bottom: 10px; margin-top: 10px; }
   .cast-row::-webkit-scrollbar { display: none; }
@@ -262,7 +261,6 @@
     </div>
   </div>
   
-  <!-- Cast Section Added Here -->
   <div class="cast-section" id="cast-container-wrap">
     <div style="font-size:14px; text-shadow:0 0 8px rgba(255,255,255,0.2);">طاقم التمثيل:</div>
     <div class="cast-row" id="cast-row"></div>
@@ -592,7 +590,6 @@ function openDetailsModal(item) {
     libBtn.innerText = 'إضافة للمكتبة';
   }
 
-  // Fetch Cast (Actors)
   const mediaType = (item.media_type === 'tv' || item.name) ? 'tv' : 'movie';
   fetch(`https://api.themoviedb.org/3/${mediaType}/${item.id}/credits?api_key=${apiKey}&language=ar-AR`)
     .then(res => res.json())
