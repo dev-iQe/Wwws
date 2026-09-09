@@ -30,6 +30,21 @@ jobs:
       - name: Add Android platform
         run: npx cap add android
 
+      - name: Fix Kotlin duplicate classes
+        run: |
+          cat >> android/build.gradle << 'EOF'
+
+          allprojects {
+              configurations.all {
+                  resolutionStrategy {
+                      force 'org.jetbrains.kotlin:kotlin-stdlib:1.9.24'
+                      force 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.24'
+                      force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.24'
+                  }
+              }
+          }
+          EOF
+
       - name: Sync
         run: npx cap sync android
 
@@ -70,24 +85,26 @@ jobs:
         run: npx cap init Strofy com.strofy.azawy --web-dir=www
 
       - name: Add iOS platform
-        run: npx cap add ios
+        run: npx cap add ios || true
 
       - name: Generate icons
         run: npx capacitor-assets generate --ios
 
-      - name: Sync
-        run: npx cap sync ios
-
       - name: Bump iOS deployment target
         run: |
-          sed -i '' "s/platform :ios, '13.0'/platform :ios, '15.0'/" ios/App/Podfile
-          cat ios/App/Podfile | grep platform
+          cat ios/App/Podfile
+          sed -i '' "s/platform :ios, '[0-9.]*'/platform :ios, '15.0'/" ios/App/Podfile
+          echo "----- after -----"
+          grep platform ios/App/Podfile
 
       - name: Install CocoaPods
         run: |
           cd ios/App
           pod repo update
           pod install
+
+      - name: Copy web assets
+        run: npx cap copy ios
 
       - name: Build unsigned app for device
         run: |
