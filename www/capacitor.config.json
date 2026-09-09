@@ -10,6 +10,9 @@
       "image.tmdb.org"
     ]
   },
+  "ios": {
+    "contentInset": "always"
+  },
   "android": {
     "allowMixedContent": true
   }
