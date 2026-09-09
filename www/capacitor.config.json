@@ -1,0 +1,16 @@
+{
+  "appId": "com.strofy.azawy",
+  "appName": "Strofy",
+  "webDir": "www",
+  "server": {
+    "allowNavigation": [
+      "vidsrc.me",
+      "*.vidsrc.me",
+      "api.themoviedb.org",
+      "image.tmdb.org"
+    ]
+  },
+  "android": {
+    "allowMixedContent": true
+  }
+}
